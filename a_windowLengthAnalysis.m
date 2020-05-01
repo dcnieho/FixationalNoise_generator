@@ -2,18 +2,19 @@ nSamp = 500;
 start = 6;
 nRep  = 1000;
 
-RMS_STDs = [.25 .5 .9 sqrt(2) 1.75];
+RMS_STDs    = [.25 .5 .9 sqrt(2) 1.75];
 magnitude   = 0.5;
-genFun = @(x) randn(1,x);
-lbl = 'Gauss';
+refs        = [12 24 50 60 200];
+genFun      = @(x) randn(1,x);
+lbl         = 'Gauss';
 
 theFields   = {
     'RMS_STD',  'signal type', 1.8
     'PSDSlope' ,'scaling exponent ($\alpha$)', nan
     'RMS',      '$\mbox{RMS-S2S}$ ($^\circ$)', 0.45
     'STD',      '$\mbox{STD}$ ($^\circ$)', 0.5
-    'lenRMSSTD','magnitude ($^\circ$)', 0.52
     'rBCEA'    ,'$\sqrt{\mbox{BCEA}}$ ($^{\circ}$)', 0.9
+    'lenRMSSTD','signal magnitude ($^\circ$)', 0.52
     };
 
 if 0    % recalc measures
@@ -21,7 +22,7 @@ if 0    % recalc measures
         
         %% step 1: generate noise nRep times for each window length
         allSamp = cell(nSamp-start+1,length(RMS_STDs),nRep);
-        for s=start:nSamp
+        for s=start:nSamp-1
             fprintf('nSamp: %d\n',s);
             for f=1:length(RMS_STDs)
                 for r=1:nRep
@@ -44,7 +45,7 @@ if 0    % recalc measures
     myStr = struct(temp{:});
     allMeasures = myStr;
     
-    for s=1:nSamp-start+1
+    for s=1:nSamp-start
         fprintf('nSamp: %d\n',s+start-1);
         for f=1:length(RMS_STDs)
             for r=1:nRep
@@ -102,6 +103,7 @@ end
 fig=figure('Units','normalized','Position',[0 .1 1 0.7]);
 legs = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
 meas = 'Mean';
+allWinlengths = start:nSamp-1;
 for f=1:size(theFields,1)
     ax(f) = subplot(2,3,f);
     
@@ -130,9 +132,9 @@ for f=1:size(theFields,1)
     for r=1:length(refs)
         plot(refs([r r]),ylim(),'--','Color',[.5 .5 .5])
     end
-    hs = plot(allWinlengths(1:end-1),means.(theFields{f,1})(1:end-1,:),'LineWidth',2);
+    hs = plot(allWinlengths,means.(theFields{f,1}),'LineWidth',2);
     
-    if f==5
+    if f==6
         lh=legend(hs,legs{:},'Location','SouthEast');
         legend boxoff
         lh.FontSize = 10;
