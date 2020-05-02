@@ -142,3 +142,4 @@ for f=1:size(theFields,1)
     end
 end
 print(fig,fullfile(cd,'results','NieZemBeeHol_fig7.png'),'-dpng','-r300');
+print(fig,fullfile(cd,'results','NieZemBeeHol_fig7'    ),'-depsc')

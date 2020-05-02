@@ -1,7 +1,7 @@
 
 
 % NieZemBeeHol Figure 5
-if 0
+if 1
     dist        = 'gauss';
     N           = 100;
     RMS_STDs    = [0.09 0.2:0.25:1.7 1.91];
@@ -43,16 +43,17 @@ if 0
     ax.XTickLabel = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
     ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),magnitudes,'uni',false);
     xlabel('signal type','interpreter','latex')
-    ylabel('magnitude ($^\circ$)','Interpreter','LaTex')
+    ylabel('signal magnitude ($^\circ$)','Interpreter','LaTex')
     if ~isfolder('results')
         mkdir('results')
     end
     print(f,'results/NieZemBeeHol_fig5.png','-dpng','-r300');
+    print(f,'results/NieZemBeeHol_fig5'    ,'-depsc');
 end
 
 
 % NieZemBeeHol Figure 6a, 6b, 6c
-if 0
+if 1
     N           = 200;
     nSamp       = 6;
     RMS_STDs    = linspace(0.1,1.9,nSamp);
@@ -124,7 +125,7 @@ if 0
         ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),magnitudes,'uni',false);
         ax.Position(2) = ax.Position(2)+0.03;
         xlabel('signal type','interpreter','latex')
-        ylabel('magnitude ($^\circ$)','Interpreter','LaTex')
+        ylabel('signal magnitude ($^\circ$)','Interpreter','LaTex')
         if ~isfolder('results')
             mkdir('results')
         end
@@ -135,6 +136,7 @@ if 0
     [axs.YLim] = deal([min(ylims(:,1)) max(ylims(:,2))]);
     for d=1:3
         print(fs(d),sprintf('results/NieZemBeeHol_fig6%s.png',lbls{d}),'-dpng','-r300');
+        print(fs(d),sprintf('results/NieZemBeeHol_fig6%s'    ,lbls{d}),'-depsc');
     end
 end
 
@@ -167,12 +169,13 @@ if 1
     
     % plot
     f=figure('Units','normalized'); hold on
-    f.Position = [0.2 f.Position(2)-.2 0.8 f.Position(4)+.1];
+    f.Position = [0.2 f.Position(2)-.2 0.52 f.Position(4)];
     voffs = [1 .45 .55 .85 .95];
     for p=1:size(generatedNoise,1)
         voff = sum(voffs(1:p));
         for q=1:size(generatedNoise,2)
-            plot(q+[generatedNoise{p,q}(1,:) generatedNoise{p,q}(1,1)],voff+[generatedNoise{p,q}(2,:) generatedNoise{p,q}(2,1)],'k')   % close the shape
+            generatedNoise{p,q} = [q+generatedNoise{p,q}(1,:); voff+generatedNoise{p,q}(2,:)];
+            plot([generatedNoise{p,q}(1,:) generatedNoise{p,q}(1,1)],[generatedNoise{p,q}(2,:) generatedNoise{p,q}(2,1)],'k')   % close the shape
         end
     end
     axis equal
@@ -180,11 +183,19 @@ if 1
     ax.XTick = [1:size(generatedNoise,2)];
     ax.YTick = cumsum(voffs);
     ax.XTickLabel = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
-    ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),magnitudes,'uni',false);
+    ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),AR,'uni',false);
+
+    all = cat(2,generatedNoise{:});
+    mins = min(all,[],2);
+    maxs = max(all,[],2);
+    rngs = maxs-mins;
+    ax.XLim = [mins(1)-.02*rngs(1) maxs(1)+.02*rngs(1)];
+    ax.YLim = [mins(2)-.02*rngs(2) maxs(2)+.02*rngs(2)];
     xlabel('signal type','interpreter','latex')
-    ylabel('magnitude ($^\circ$)','Interpreter','LaTex')
+    ylabel('aspect ratio','Interpreter','LaTex')
     if ~isfolder('results')
         mkdir('results')
     end
     print(f,'results/NieZemBeeHol_fig6d.png','-dpng','-r300');
+    print(f,'results/NieZemBeeHol_fig6d'    ,'-depsc');
 end
