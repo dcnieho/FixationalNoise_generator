@@ -42,8 +42,8 @@ if 1
     ax.YTick = cumsum(voffs);
     ax.XTickLabel = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
     ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),magnitudes,'uni',false);
-    xlabel('signal type','interpreter','latex')
-    ylabel('signal magnitude ($^\circ$)','Interpreter','LaTex')
+    xlabel('signal type')
+    ylabel('signal magnitude (°)')
     if ~isfolder('results')
         mkdir('results')
     end
@@ -123,9 +123,13 @@ if 1
         ax.YTick = cumsum(voffs);
         ax.XTickLabel = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
         ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),magnitudes,'uni',false);
+        ax.XAxis.FontSize = 12;
+        ax.XAxis.Label.FontSize = 14;
+        ax.YAxis.FontSize = 12;
+        ax.YAxis.Label.FontSize = 14;
         ax.Position(2) = ax.Position(2)+0.03;
-        xlabel('signal type','interpreter','latex')
-        ylabel('signal magnitude ($^\circ$)','Interpreter','LaTex')
+        xlabel('signal type')
+        ylabel('signal magnitude (°)')
         if ~isfolder('results')
             mkdir('results')
         end
@@ -184,6 +188,10 @@ if 1
     ax.YTick = cumsum(voffs);
     ax.XTickLabel = arrayfun(@(x) sprintf('%.2f',x),RMS_STDs,'uni',false);
     ax.YTickLabel = arrayfun(@(x) sprintf('%.1f',x),AR,'uni',false);
+    ax.XAxis.FontSize = 12;
+    ax.XAxis.Label.FontSize = 14;
+    ax.YAxis.FontSize = 12;
+    ax.YAxis.Label.FontSize = 14;
 
     all = cat(2,generatedNoise{:});
     mins = min(all,[],2);

@@ -111,6 +111,7 @@ for f=1:size(theFields,1)
     ax(f).XAxis.LineWidth = 1.5;
     ax(f).YAxis.LineWidth = 1.5;
     ax(f).YAxis.TickLabelFormat = '%.1f';
+    ax(f).YAxis.FontName = 'Arial';
     
     if f>size(theFields,1)/2
         xlabel('window length (number of samples)','Interpreter','LaTex')
